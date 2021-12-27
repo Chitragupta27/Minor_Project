@@ -1,0 +1,9 @@
+{
+    "environments": {
+        "model-api": {
+            "platform": "linux",
+            "transformer": "flask"
+        }
+    },
+    "notebook": "model.ipynb"
+}
