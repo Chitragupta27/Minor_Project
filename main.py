@@ -18,20 +18,18 @@ import streamlit as st
 
 def main():
     st.title("Flood prediction")
-    x = pd.read_csv(
-        "C:\\Users\\Chitragupta Anubhav\\Documents\\Minor_Project\\kerala.csv")
+    x = pd.read_csv("C:\\Users\\Chitragupta Anubhav\\Documents\\Minor_Project\\kerala.csv")
 
 
-    y = pd.read_csv(
-    "C:\\Users\\Chitragupta Anubhav\\Documents\\Minor_Project\\kerala.csv")
+    y = pd.read_csv("C:\\Users\\Chitragupta Anubhav\\Documents\\Minor_Project\\kerala.csv")
 
     y1 = list(x["YEAR"])
     x1 = list(x["Jun-Sep"])
     z1 = list(x["JUN"])
     w1 = list(x["MAY"])
 
-    plt.plot(y1, x1, '*')
-    plt.show()
+    # plt.plot(y1, x1, '*')
+    # plt.show()
 
 
     flood = []
@@ -65,8 +63,8 @@ def main():
     x["sub"] = sub
 
     # SAVING THE NEW CSV FILE WITH THE NEW COLOUMNS
-    x.to_csv("out1.csv")
-    print((x))
+    # x.to_csv("out1.csv")
+    # print((x))
 
 
     # TAKING THE COLOUMNS WHICH ARE TO USED FOR TRAINING THE MODEL
@@ -105,9 +103,9 @@ def main():
     for i in range(len(f1)):
 
         if (int(f1[i]) == 1):
-            print(f1[i], "- possibility of  severe flood")
+            st.text(f1[i])#, "- possibility of  severe flood")
         else:
-            print(f1[i], "- no chance of severe flood")
+            st.text(f1[i])#, "- no chance of severe flood")
 
 
 if __name__ == '__main__':
