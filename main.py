@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[7]:
-
-
 import scipy
+import codecs
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -14,14 +12,35 @@ from scipy.stats import spearmanr
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.utils import shuffle
 import streamlit as st
-
-def main():
-    st.title("Flood prediction")
-    x = pd.read_csv("C:\\Users\\Chitragupta Anubhav\\Documents\\Minor_Project\\kerala.csv")
+import streamlit.components.v1 as stc
 
 
-    y = pd.read_csv("C:\\Users\\Chitragupta Anubhav\\Documents\\Minor_Project\\kerala.csv")
+def st_html(index_html):
+    calc_file = codecs.open(index_html,'r')
+    page = calc_file.read()
+    stc.html(page,scrolling=False)
+    
+
+def model(ab,cd,ef,place):
+#     st.markdown("""
+# <html>
+# <body>
+
+# <h1 style="color:blue;text-align:center;">This is a heading</h1>
+# <p style="color:red;">This is a paragraph.</p>
+
+# </body>
+# </html>
+
+# """,unsafe_allow_html=True )
+    newpath = "C:\\Users\\ajayp\\Documents\\Minor_Project\\States\\"+place+".csv"
+    # x = pd.read_csv("C:\\Users\\ajayp\\Documents\\Minor_Project\\kerala.csv")
+    # y = pd.read_csv("C:\\Users\\ajayp\\Documents\\Minor_Project\\kerala.csv")
+    x = pd.read_csv(newpath)
+    #df1 = pd.read_csv(url_dataset1, index_col=0)
+    y = pd.read_csv(newpath)
 
     y1 = list(x["YEAR"])
     x1 = list(x["Jun-Sep"])
@@ -63,8 +82,8 @@ def main():
     x["sub"] = sub
 
     # SAVING THE NEW CSV FILE WITH THE NEW COLOUMNS
-    # x.to_csv("out1.csv")
-    # print((x))
+    x.to_csv("out\\out"+place+".csv")
+    st.dataframe((x))
 
 
     # TAKING THE COLOUMNS WHICH ARE TO USED FOR TRAINING THE MODEL
@@ -76,24 +95,25 @@ def main():
 
     # WE USE LOGISTIC REGRESSION FOR TRAINING
 
-    X = x.iloc[:, [16, 20, 21]].values
-    y1 = x.iloc[:, 19].values
-
+    X_1 = x.iloc[:, [16, 20, 21]].values
+    y_1 = x.iloc[:, 19].values
+    X, y1 = shuffle(X_1, y_1)
     (X_train, X_test, Y_train, Y_test) = train_test_split(X, y1, random_state=0)
 
 
     #X1= scale(X)
     # print(X1)
-
+    
     Lr = LogisticRegression()
-
+    
     Lr.fit(X, y1)
+
     print(Lr.score(X, y1))  # PRINTS THE ACCURACY
     # ypred=Lr.score(X_test,Y_test)
     # print(ypred)
 
-
-    l = [[50, 300, 205]]
+    
+    l = [[ab, cd, ef]]
 
     # print(X)
 
@@ -101,12 +121,24 @@ def main():
     f1 = Lr.predict(l)
 
     for i in range(len(f1)):
-
+        
         if (int(f1[i]) == 1):
             st.text(f1[i])#, "- possibility of  severe flood")
         else:
             st.text(f1[i])#, "- no chance of severe flood")
 
+def main():
+   #st_html('index.html')
+    st.title("Flood prediction using Machine Learning")
+    abc = st.selectbox('Select a State',('bihar','telangana','Delhi','west bengal','kerala','andaman','saurashtra region','south interior karnatka'))   
+    ab = st.number_input("Enter rainfall average from march to may") # present years march to may rainfall data on average
+    cd = st.number_input("Average rainfall in past 10 days") #average rainfall in past 10 days of june
+    ef = st.number_input(" Average increase in rainfall from may to june") #average inscrease in rainfall from may to june
+    if st.button("Submit"):
+        model(ab,cd,ef,abc)
+
 
 if __name__ == '__main__':
+    st.set_page_config(layout="wide")
     main()
+    
